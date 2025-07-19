@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Health consultation
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -37,3 +38,7 @@ npm run build
 ```sh
 npm run lint
 ```
+=======
+# HX
+HX健康通
+>>>>>>> 43555ce7e48344699359a99f507a11cae3d668de
