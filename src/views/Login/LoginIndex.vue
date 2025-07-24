@@ -2,9 +2,10 @@
 import { onUnmounted, ref } from 'vue'
 import NavBar from '@/components/ow-nav-bar.vue'
 import { codeRules, mobileRules, passwordRules } from '@/utils/formRules'
-import { showSuccessToast, Toast, type FormInstance } from 'vant'
+import { showSuccessToast, Toast, type FormInstance, showToast } from 'vant'
 import { loginByPassword, loginByMobile, sendMobileCode } from '@/apis/user'
 import { useUserStore } from '@/stores'
+import { useSendCode } from '@/views/Login/service/index'
 import type { User, CodeType } from '@/types/user'
 import router from '@/router'
 import { useRoute } from 'vue-router'
@@ -17,45 +18,22 @@ const store = useUserStore()
 
 const mobile = ref('')
 const password = ref('')
-const code = ref('')
-const time = ref(0)
-const form = ref<FormInstance>()
-let timeId: number
+const { code, time, form, send } = useSendCode(mobile)
 //登录
 const login = async () => {
   if (!agree.value) {
-    return new Toast('请勾选我同意')
+    showToast('请勾选我同意')
   }
   try {
     const res = isPass.value
       ? await loginByPassword(mobile.value, password.value)
       : await loginByMobile(mobile.value, code.value)
     store.setUser(res)
-    showSuccessToast('登录成功')
     router.push((route.query.returnUrl as string) || '/user')
   } catch (error) {
     console.log('登录不成功', error)
   }
 }
-const send = async () => {
-  if (time.value > 0) return
-  await form.value?.validate('mobile')
-  const res = await sendMobileCode(mobile.value, 'login')
-  console.log('短信验证码', res.data.code)
-  showSuccessToast('发送成功')
-  time.value = 60
-  //倒计时
-  timeId = window.setInterval(() => {
-    time.value--
-    if (time.value <= 0) {
-      window.clearInterval(timeId)
-    }
-  }, 1000)
-}
-
-onUnmounted(() => {
-  window.clearInterval(timeId)
-})
 </script>
 
 <template>

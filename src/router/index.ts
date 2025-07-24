@@ -13,7 +13,7 @@ router.beforeEach((to) => {
   document.title = `HX健康通-${to.meta.title}`
   //检查是否有token，没有就拦截返回登录
   const store = useUserStore()
-  if (!store.user.token && !['/login', '/other'].includes(to.path)) {
+  if (!store.user?.token && !['/login', '/other'].includes(to.path)) {
     return '/login'
   }
 })

@@ -1,18 +1,55 @@
 <script setup lang="ts">
-import { getPatientList } from '@/apis/user'
+import { addPatient, deletePatient, editPatient, getPatientList } from '@/apis/user'
 import type { Patient, PatientList } from '@/types/user'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import owNavBar from '@/components/ow-nav-bar.vue'
+import { Toast, showConfirmDialog, showToast } from 'vant'
+import Validator from 'id-validator'
 const list = ref<PatientList>([])
 
+//默认患者信息
+const defaultPatient = ref<Patient>({
+  name: '',
+  idCard: '',
+  defaultFlag: 0,
+  gender: 1,
+})
+const patientAdd = ref<Patient>({ ...defaultPatient.value })
+const show = ref(false)
+
 const loadList = async () => {
-  const { data } = await getPatientList()
-  console.log('患者列表', data)
-  list.value = data
+  const res = await getPatientList()
+  console.log('患者列表', res)
+  list.value = res
 }
 
-const show = ref(false)
-const showPopup = () => {
+const remove = async () => {
+  if (patientAdd.value.id) {
+    await showConfirmDialog({
+      title: '温馨提示',
+      message: `您确定要删除${patientAdd.value.name}患者信息吗？`,
+    })
+    await deletePatient(patientAdd.value.id)
+    show.value = false
+    loadList()
+    showToast('删除成功')
+  }
+}
+const isDefaultPatient = computed({
+  get: () => patientAdd.value.defaultFlag === 1,
+  set: (val: boolean) => {
+    patientAdd.value.defaultFlag = val ? 1 : 0
+  },
+})
+
+const showPopup = (item?: Patient) => {
+  if (item) {
+    const { id, gender, name, idCard, defaultFlag } = item
+    patientAdd.value = { id, gender, name, idCard, defaultFlag }
+  } else {
+    // 新增时，重置为新对象，避免和 defaultPatient.value 产生引用关系
+    patientAdd.value = { ...defaultPatient.value }
+  }
   show.value = true
 }
 
@@ -24,6 +61,22 @@ const options = [
   { label: '男', value: 1 },
   { label: '女', value: 0 },
 ]
+
+const submit = async () => {
+  const validator = new Validator()
+  if (!validator.isValid(patientAdd.value.idCard)) return showToast('身份证格式错误')
+  const { sex } = validator.getInfo(patientAdd.value.idCard)
+  if (patientAdd.value.gender !== sex) return showToast('性别和身份证不符')
+  try {
+    console.log('可以新增患者了', patientAdd.value)
+    patientAdd.value.id ? await editPatient(patientAdd.value) : await addPatient(patientAdd.value)
+    closePopup()
+    loadList()
+    showToast({ type: 'success', message: '保存成功' })
+  } catch (error) {
+    console.log(error)
+  }
+}
 // 存储选中的性别
 const gender = ref(1)
 onMounted(() => {
@@ -33,7 +86,7 @@ onMounted(() => {
 
 <template>
   <div class="patient-page">
-    <cp-nav-bar title="家庭档案" />
+    <owNavBar middle="家庭档案" />
     <!-- 头部选择提示 -->
     <div class="patient-change" v-if="false">
       <h3>请选择患者信息</h3>
@@ -47,36 +100,43 @@ onMounted(() => {
           <span>{{ item.genderValue }}</span>
           <span>{{ item.age }}岁</span>
         </div>
-        <div class="icon"><ow-icon icon-url="user-edit" /></div>
+        <div class="icon"><ow-icon @click="showPopup(item)" icon-url="user-edit" /></div>
         <div class="tag" v-if="item.defaultFlag === 1">默认</div>
       </div>
-      <div class="patient-add" @click="showPopup">
+      <div class="patient-add" @click="showPopup()">
         <ow-icon icon-url="user-add" />
         <p>添加患者</p>
       </div>
       <div class="patient-tip">最多可添加 6 人</div>
     </div>
-    <!-- 患者选择下一步 -->
-    <div class="patient-next" v-if="false">
-      <van-button type="primary" round block>下一步</van-button>
-    </div>
+
     <!-- 新增弹出层 -->
     <VanPopup v-model:show="show" position="bottom" class="patient-popup">
-      <owNavBar middle="新增患者" right="保存" :back="closePopup"></owNavBar>
+      <owNavBar
+        :middle="patientAdd.id ? '编辑患者' : '新增患者'"
+        right="保存"
+        :back="closePopup"
+        @click-right="submit"
+      ></owNavBar>
       <!-- 新增患者表单 -->
-      <div class="popup-content">
-        <!-- 这里是表单内容，之前的12415测试内容已替换为实际表单结构 -->
-        <owRadioBtn  v-model="gender" :options="options"></owRadioBtn>
-        <div class="form-item">
-          <label>姓名</label>
-          <input type="text" placeholder="请输入姓名" />
-        </div>
-        <div class="form-item">
-          <label>身份证号</label>
-          <input type="text" placeholder="请输入身份证号" />
-        </div>
-        <!-- 其他表单字段 -->
-      </div>
+      <van-form autocomplete="off" class="popup-content">
+        <van-field v-model="patientAdd.name" label="真实姓名" placeholder="请输入真实姓名" />
+        <van-field v-model="patientAdd.idCard" label="身份证号" placeholder="请输入身份证号" />
+        <van-field label="性别">
+          <!-- 单选按钮组件 -->
+          <template #input>
+            <owRadioBtn :options="options" v-model="patientAdd.gender"></owRadioBtn>
+          </template>
+        </van-field>
+        <van-field label="默认就诊人">
+          <template #input>
+            <van-checkbox v-model="isDefaultPatient" round />
+          </template>
+        </van-field>
+      </van-form>
+      <van-action-bar v-if="patientAdd.id">
+        <van-action-bar-button @click="remove" type="danger" text="删除"></van-action-bar-button>
+      </van-action-bar>
     </VanPopup>
   </div>
 </template>

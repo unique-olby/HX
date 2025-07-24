@@ -31,8 +31,8 @@ request.interceptors.response.use(
       showFailToast(res.data.message)
       return Promise.reject(res.data)
     }
-    console.log('接口原始响应', res)
-    return res.data
+    console.log('接口原始响应', res.data.data)
+    return res.data.data
   },
   (err: AxiosError) => {
     if (err.response?.status === 401) {

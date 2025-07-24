@@ -15,6 +15,11 @@ export default defineConfig({
     vueDevTools(),
     Components({
       dts: false, //关闭自动生成类型
+      dirs:[
+        'src/components',
+        'src/views'
+      ],
+      deep:true,
       resolvers: [VantResolver()],
     }),
     //配置精灵图

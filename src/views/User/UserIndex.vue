@@ -8,9 +8,9 @@ import { useRouter } from 'vue-router'
 const userData = ref({} as UserInfo)
 //获取用户数据
 async function getUserInfo() {
-  const { data } = await userInfo()
-  console.log('用户数据', data)
-  userData.value = data
+  const res = await userInfo()
+  console.log('用户数据', res)
+  userData.value = res
 }
 //推出登录
 const store = useUserStore()
