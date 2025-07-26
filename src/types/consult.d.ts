@@ -74,3 +74,67 @@ export type DoctorPage = {
 }
 // 关注的类型
 export type FollowType = 'doc' | 'knowledge' | 'topic' | 'disease'
+
+import { ConsultType, ConsultTime } from '@/enums'
+
+// 图片列表
+export type Image = {
+  id: string
+  url: string
+}
+// 问诊记录=> 极速问诊参数
+export type Consult = {
+  type: ConsultType // 问诊类型：1找医生 2极速问诊 3开药问诊
+  illnessType: 0 | 1 // 问诊级别：0普通  1三甲
+  depId: string // 问诊科室id
+  illnessDesc: string // 病情描述
+  illnessTime: ConsultTime // 患病时间：1一周内2一月内3半年内4半年以上
+  consultFlag: 0 | 1 // 是否问诊过：0未问诊1问诊过
+  pictures: Image[] // 病例信息-图片集合
+  patientId: string // 患者id
+  couponId: string // 优惠卷id
+}
+
+// 问诊记录-全部可选
+// Required 转换为全部必须   Partial 转换问全部可选  两个内置的泛型类型
+export type PartialConsult = Partial<Consult>
+
+// 科室
+export type SubDep = {
+  id: string
+  name: string
+}
+// 一级科室
+export type TopDep = SubDep & {
+  child: SubDep[]
+}
+
+// 病情描述全部必填
+export type ConsultIllness = Pick<
+  PartialConsult,
+  'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'
+>
+// 问诊订单预支付请求参数
+export type ConsultOrderPreParams = Pick<PartialConsult, 'type' | 'illnessType'>
+
+// 问诊订单预支付返回数据
+export type ConsultOrderPreData = {
+  pointDeduction: number
+  couponDeduction: number
+  couponId: string
+  payment: number // 应付
+  actualPayment: number // 实付
+}
+
+// 问诊订单预支付请求参数
+export type ConsultOrderPreParams = Pick<PartialConsult, 'type' | 'illnessType'>
+
+// 问诊订单预支付返回数据
+export type ConsultOrderPreData = {
+  pointDeduction: number
+  couponDeduction: number
+  couponId: string
+  payment: number // 应付
+  couponId: number
+  actualPayment: number // 实付
+}

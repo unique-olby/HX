@@ -18,7 +18,7 @@
           </router-link>
         </van-col>
         <van-col span="8">
-          <router-link to="/consult/fast" class="nav">
+          <router-link @click="store.setType(ConsultType.Fast)" to="/consult/fast" class="nav">
             <owIcon icon-url="home-graphic"></owIcon>
             <p class="title">极速问诊</p>
             <p class="desc">20s医生极速回复</p>
@@ -71,10 +71,10 @@
       </van-swipe>
     </div>
     <!-- 4. 知识列表：关注、推荐、减脂、饮食 -->
-    <van-tabs shrink sticky v-model:active="active"  >
+    <van-tabs shrink sticky v-model:active="active">
       <van-tab name="like" title="关注">
         <OwFollowDoctor></OwFollowDoctor>
-        <owKnowlegeList type="like"/>
+        <owKnowlegeList type="like" />
       </van-tab>
       <van-tab name="recommend" title="推荐"><owKnowlegeList type="recommend" /></van-tab>
       <van-tab name="fatReduction" title="减脂"><owKnowlegeList type="fatReduction" /></van-tab>
@@ -86,10 +86,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { KnowledgeType } from '@/types/consult'
-import OwFollowDoctor from './components/ow-FollowDoctor.vue';
-
+import OwFollowDoctor from './components/ow-FollowDoctor.vue'
+import { useConsultStore } from '@/stores'
+import { ConsultType } from '@/enums'
+const store = useConsultStore()
 const active = ref(0)
-
 </script>
 
 <style lang="scss" scoped>

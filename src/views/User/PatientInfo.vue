@@ -5,6 +5,8 @@ import { computed, onMounted, ref } from 'vue'
 import owNavBar from '@/components/ow-nav-bar.vue'
 import { Toast, showConfirmDialog, showToast } from 'vant'
 import Validator from 'id-validator'
+import { useRoute, useRouter } from 'vue-router'
+import { useConsultStore } from '@/stores/modules/consult'
 const list = ref<PatientList>([])
 
 //默认患者信息
@@ -21,6 +23,12 @@ const loadList = async () => {
   const res = await getPatientList()
   console.log('患者列表', res)
   list.value = res
+  // 设置默认选中的ID，当你是选择患者的时候，且有患者信息的时候
+  if (isSel.value && list.value.length) {
+    const defPatient = list.value.find((item) => item.defaultFlag === 1)
+    if (defPatient) patientId.value = defPatient.id
+    else patientId.value = list.value[0].id
+  }
 }
 
 const remove = async () => {
@@ -82,18 +90,45 @@ const gender = ref(1)
 onMounted(() => {
   loadList()
 })
+
+const route = useRoute()
+//判断是否为选择患者还是编辑家庭档案
+const isSel = computed(() => {
+  return route.query.isSel === '1'
+})
+// 存储点击选中患者ID作为标识
+const patientId = ref<string>()
+const selectedPatient = (item: Patient) => {
+  if (isSel.value) {
+    patientId.value = item.id
+  }
+}
+// 记录患者ID跳转到待支付页面
+const store = useConsultStore()
+const router = useRouter()
+const next = async () => {
+  if (!patientId.value) return showToast('请选择问诊患者')
+  store.setPatient(patientId.value)
+  router.push('/consult/pay')
+}
 </script>
 
 <template>
   <div class="patient-page">
-    <owNavBar middle="家庭档案" />
+    <owNavBar :middle="isSel ? '选择患者' : '家庭档案'" />
     <!-- 头部选择提示 -->
-    <div class="patient-change" v-if="false">
+    <div class="patient-change" v-if="isSel">
       <h3>请选择患者信息</h3>
       <p>以便医生给出更准确的治疗，信息仅医生可见</p>
     </div>
     <div class="patient-list">
-      <div class="patient-item" v-for="item in list" :key="item.id">
+      <div
+        class="patient-item"
+        v-for="item in list"
+        :key="item.id"
+        @click="selectedPatient(item)"
+        :class="{ selected: patientId === item.id }"
+      >
         <div class="info">
           <span class="name">{{ item.name }}</span>
           <span class="id">{{ item.idCard.replace(/^(.{6})(?:\d+)(.{4})$/, '$1******$2') }}</span>
@@ -108,6 +143,9 @@ onMounted(() => {
         <p>添加患者</p>
       </div>
       <div class="patient-tip">最多可添加 6 人</div>
+      <div class="patient-next" v-if="isSel">
+        <van-button  type="primary" @click="next" round block>下一步</van-button>
+      </div>
     </div>
 
     <!-- 新增弹出层 -->
