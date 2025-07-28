@@ -3,7 +3,7 @@ import { uploadImage } from '@/apis/consult'
 import OwNavBar from '@/components/ow-nav-bar.vue'
 import OwRadioBtn from '@/components/ow-radio-btn.vue'
 import { useConsultStore } from '@/stores'
-import type { ConsultIllness } from '@/types/consult'
+import type { ConsultIllness, Image } from '@/types/consult'
 import {
   showConfirmDialog,
   showToast,
@@ -12,19 +12,7 @@ import {
 } from 'vant'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-// 患病时间选项
-const timeOptions = [
-  { label: '一周内', value: 1 },
-  { label: '一月内', value: 2 },
-  { label: '半年内', value: 3 },
-  { label: '大于半年', value: 4 },
-]
-// 是否就诊选项
-const flagOptions = [
-  { label: '就诊过', value: 0 },
-  { label: '没就诊过', value: 1 },
-]
+import { timeOptions, flagOptions } from '@/apis/const'
 
 // 表单变量
 const form = ref<ConsultIllness>({
@@ -44,10 +32,13 @@ const onAfterRead: UploaderAfterRead = (item) => {
   item.message = '上传中...'
   uploadImage(item.file)
     .then((res) => {
+      // const Image = [{id: res.id, url:res.url}]
+      // form.value.pictures = Image;
       item.status = 'done'
       item.message = undefined
       // 给 item 加上 url 是为了删除可以根据 url 进行删除
       item.url = res.url
+      form.value.pictures?.push(res)
     })
     .catch(() => {
       item.status = 'failed'

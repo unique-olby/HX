@@ -54,4 +54,8 @@ export const getConsultOrderPayUrl = (data: {
   paymentMethod: 0 | 1
   orderId: string
   payCallback: string
-}) => request.post<any, { payUrl: string }>('/patient/consult/pay', data)
+}) => {
+  const res = request.post<any, { payUrl: string }>('/patient/consult/pay', data)
+  console.log('获取支付地址', res)
+  return res
+}

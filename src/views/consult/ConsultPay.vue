@@ -35,10 +35,13 @@ const show = ref(false)
 const paymentMethod = ref<0 | 1>()
 const orderId = ref<string>()
 const submit = async () => {
+  console.log('ffff开始执行')
   if (!agree.value) return showToast('请勾选我已同意支付协议')
+    console.log('ffff',store.consult)
   const res = await createConsultOrder(store.consult)
+  console.log('ffff', res)
   orderId.value = res.id
-  store.clear()
+  // store.clear()
   // 打开
   show.value = true
 }
@@ -70,10 +73,12 @@ const pay = async () => {
   const res = await getConsultOrderPayUrl({
     orderId: orderId.value,
     paymentMethod: paymentMethod.value,
-    payCallback: 'http://localhost/room',
+    payCallback: `${window.location.origin}/room`, //支付成功跳转路径到room
   })
+  //跳转到支付宝进行支付，成功后到PayCallback
   window.location.href = res.payUrl
 }
+//
 onMounted(() => {
   loadData()
   loadPatient()
