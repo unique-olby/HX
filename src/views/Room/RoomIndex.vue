@@ -120,8 +120,9 @@ const sendImage = (val: Image) => {
       picture: val,
     },
   })
+
 }
-provide('orderDetail', orderDetail)
+provide('orderDetail', orderDetail.value)
 provide('completeEva', completeEva)
 onMounted(async () => {
   initSocket()

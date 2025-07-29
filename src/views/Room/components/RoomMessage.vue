@@ -42,7 +42,7 @@ const lookPre = async (id?: string) => {
     const res = await getPrescriptionPic(id)
     showImagePreview([res.url])
   } catch (error) {
-    console.log('查看处方失败', error)
+    console.log('没有上传病情描述图片', error)
   }
 }
 
@@ -59,6 +59,7 @@ const goPay = (prescription?: Prescription) => {
     }
   }
 }
+
 // 格式化时间
 const formatTime = (time: string) => {
   return dayjs(time).format('HH:mm')
@@ -127,7 +128,7 @@ const formatTime = (time: string) => {
     >
       <div class="content">
         <div class="time">{{ formatTime(item.createTime) }}</div>
-        <van-image fit="contain" :src="item.msg.picture?.url" />
+        <van-image fit="contain" @load="loadSuccess" :src="item.msg.picture?.url" />
       </div>
       <van-image :src="store.user.avatar" />
     </div>

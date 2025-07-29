@@ -19,7 +19,7 @@ const props = defineProps<{
 // 把输入的聊天文字 子传父组件
 // 父组件再使用websocket.emit方法把聊天文字发送给ws服务器=》聊天内容给医生
 const sendText = () => {
-  if(props.disabled){
+  if (props.disabled) {
     showToast('代诊状态还不能发消息')
   }
   if (text.value.trim()) {

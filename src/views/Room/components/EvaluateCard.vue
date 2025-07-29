@@ -52,7 +52,7 @@ defineProps<{
     <p class="title">感谢您的评价</p>
     <p class="desc">本次在线问诊服务您还满意吗？</p>
     <van-rate
-      :model-value="score"
+      v-model="score"
       size="7vw"
       gutter="3vw"
       color="#FADB14"
