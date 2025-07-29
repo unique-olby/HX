@@ -70,6 +70,7 @@ const pay = async () => {
   // 注意支付方式0微信，不能做!判断
   if (paymentMethod.value === undefined) return showToast('请选择支付方式')
   showLoadingToast('跳转支付')
+
   const res = await getConsultOrderPayUrl({
     orderId: orderId.value,
     paymentMethod: paymentMethod.value,

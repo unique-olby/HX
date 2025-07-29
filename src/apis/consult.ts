@@ -9,6 +9,7 @@ import type {
   ConsultOrderPreParams,
   ConsultOrderPreData,
   PartialConsult,
+  ConsultOrderItem,
 } from '@/types/consult'
 import { request } from '@/utils/request'
 // 获取文章列表
@@ -59,3 +60,22 @@ export const getConsultOrderPayUrl = (data: {
   console.log('获取支付地址', res)
   return res
 }
+
+// 获取问诊订单详情
+export function getOrderDetail(orderId: string) {
+  return request.get<any, ConsultOrderItem>('/patient/consult/order/detail', {
+    params: { orderId },
+  })
+}
+// 评价问诊
+export const evaluateConsultOrder = (data: {
+  docId: string // 医生ID
+  orderId: string // 订单ID
+  score: number // 评价星级
+  content: string // 评价留言
+  anonymousFlag: 0 | 1 // 是否匿名评价：1匿名 0实名
+}) => request.post('/patient/order/evaluate', data)
+
+export const getPrescriptionPic = (id: string) =>
+  request.get<any, { url: string }>(`/patient/consult/prescription/${id}`)
+

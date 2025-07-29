@@ -33,7 +33,7 @@ export type Patient = {
   id?: string
   name: string
   idCard: string
-  defaultFlag: 0 | 1 //是否为默认患者
+  defaultFlag?: 0 | 1 //是否为默认患者
   gender: 0 | 1 //1男0女
   genderValue?: string
   age?: number

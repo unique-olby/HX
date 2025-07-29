@@ -38,7 +38,8 @@ const onAfterRead: UploaderAfterRead = (item) => {
       item.message = undefined
       // 给 item 加上 url 是为了删除可以根据 url 进行删除
       item.url = res.url
-      form.value.pictures?.push(res)
+      item.id = res.id
+      // form.value.pictures?.push(res)
     })
     .catch(() => {
       item.status = 'failed'

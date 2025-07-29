@@ -76,6 +76,7 @@ export type DoctorPage = {
 export type FollowType = 'doc' | 'knowledge' | 'topic' | 'disease'
 
 import { ConsultType, ConsultTime } from '@/enums'
+import type { Patient } from './user'
 
 // 图片列表
 export type Image = {
@@ -115,7 +116,7 @@ export type ConsultIllness = Pick<
   'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'
 >
 // 问诊订单预支付请求参数
-export type ConsultOrderPreParams = Pick<PartialConsult, 'type' | 'illnessType'>
+export type ConsultOrderPreParams = Pick<PartialConsult, 'type' | 'illnessType'|'couponId'>
 
 // 问诊订单预支付返回数据
 export type ConsultOrderPreData = {
@@ -137,4 +138,23 @@ export type ConsultOrderPreData = {
   payment: number // 应付
   couponId: number
   actualPayment: number // 实付
+}
+
+// 问诊订单详情类型
+export type ConsultOrderItem = Consult & {
+  id: string
+  createTime: string
+  docInfo?: Doctor
+  patientInfo: Patient
+  orderNo: string
+  statusValue: string
+  typeValue: string
+  status: OrderType
+  countdown: number
+  prescriptionId?: string
+  evaluateId: number
+  payment: number
+  couponDeduction: number
+  pointDeduction: number
+  actualPayment: number
 }
