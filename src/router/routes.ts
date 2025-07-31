@@ -9,6 +9,7 @@ const routes = [
     //父路由：layout公共布局
     path: '/',
     component: () => import('@/views/LayOut/LayOutIndex.vue'),
+    redirect: '/home',
     //子路由
     children: [
       {
@@ -38,6 +39,11 @@ const routes = [
     path: '/user/patient',
     component: () => import('@/views/User/PatientInfo.vue'),
   },
+  // 问诊订单
+  {
+    path: '/user/consult',
+    component: () => import('@/views/User/ConsultOrder.vue'),
+  },
   //问诊级别
   {
     path: '/consult/fast',
@@ -56,6 +62,12 @@ const routes = [
     component: () => import('@/views/consult/ConsultIllness.vue'),
     meta: { title: '图文问诊' },
   },
+  // 问诊详情
+  {
+    path: '/user/consult/:id',
+    component: () => import('@/views/User/components/ConsultDetail.vue'),
+    meta: { title: '问诊详情' },
+  },
   {
     path: '/consult/pay',
     component: () => import('@/views/consult/ConsultPay.vue'),
@@ -66,7 +78,6 @@ const routes = [
     component: () => import('@/views/Room/RoomIndex.vue'),
     meta: { title: '问诊室' },
   },
-  
 ]
 
 export default routes

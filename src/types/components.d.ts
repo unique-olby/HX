@@ -5,6 +5,8 @@ import owRadioBtn from '@/components/ow-radio-btn.vue'
 import owKnowlegeList from '@/views/Home/components/ow-knowlegeList.vue'
 import owKnowlegeCard from '@/views/Home/components/ow-knowlegeCard.vue'
 import owDoctorCard from '@/views/Home/components/ow-DoctorCard.vue'
+import owPaySheet from '@/components/ow-pay-sheet.vue'
+
 declare module 'vue' {
   interface GlobalComponents {
     navBar: typeof navBar
@@ -13,5 +15,6 @@ declare module 'vue' {
     owKnowlegeList: typeof owKnowlegeList
     owKnowlegeCard: typeof owKnowlegeCard
     owDoctorCard: typeof owDoctorCard
+    owPaySheet: typeof owPaySheet
   }
 }

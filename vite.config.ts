@@ -11,7 +11,8 @@ import path from 'path'
 export default defineConfig({
   //base:'服务器中防止的目录路径'
   plugins: [
-    vue({}),
+    vue({
+    }),
     vueDevTools(),
     Components({
       dts: false, //关闭自动生成类型

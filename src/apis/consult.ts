@@ -10,6 +10,8 @@ import type {
   ConsultOrderPreData,
   PartialConsult,
   ConsultOrderItem,
+  ConsultOrderListParams,
+  ConsultOrderPage,
 } from '@/types/consult'
 import { request } from '@/utils/request'
 // 获取文章列表
@@ -75,7 +77,15 @@ export const evaluateConsultOrder = (data: {
   content: string // 评价留言
   anonymousFlag: 0 | 1 // 是否匿名评价：1匿名 0实名
 }) => request.post('/patient/order/evaluate', data)
-
+// 获取处方图片
 export const getPrescriptionPic = (id: string) =>
   request.get<any, { url: string }>(`/patient/consult/prescription/${id}`)
+// 获取问诊订单
+export const getConsultOrderList = (params: ConsultOrderListParams) =>
+  request.get<ConsultOrderPage>('/patient/consult/order/list', { params })
 
+// 取消订单
+export const cancelOrder = (id: string) => request.put(`/patient/order/cancel/${id}`)
+
+// 删除订单
+export const deleteOrder = (id: string) => request.delete(`/patient/order/${id}`)

@@ -31,13 +31,11 @@ const loadPatient = async () => {
 }
 const agree = ref(false)
 const show = ref(false)
-// 支付方式
-const paymentMethod = ref<0 | 1>()
 const orderId = ref<string>()
 const submit = async () => {
   console.log('ffff开始执行')
   if (!agree.value) return showToast('请勾选我已同意支付协议')
-    console.log('ffff',store.consult)
+  console.log('ffff', store.consult)
   const res = await createConsultOrder(store.consult)
   console.log('ffff', res)
   orderId.value = res.id
@@ -66,19 +64,19 @@ const onClose = () => {
 }
 
 // 跳转支付
-const pay = async () => {
-  // 注意支付方式0微信，不能做!判断
-  if (paymentMethod.value === undefined) return showToast('请选择支付方式')
-  showLoadingToast('跳转支付')
+// const pay = async () => {
+//   // 注意支付方式0微信，不能做!判断
+//   if (paymentMethod.value === undefined) return showToast('请选择支付方式')
+//   showLoadingToast('跳转支付')
 
-  const res = await getConsultOrderPayUrl({
-    orderId: orderId.value,
-    paymentMethod: paymentMethod.value,
-    payCallback: `${window.location.origin}/room`, //支付成功跳转路径到room
-  })
-  //跳转到支付宝进行支付，成功后到PayCallback
-  window.location.href = res.payUrl
-}
+//   const res = await getConsultOrderPayUrl({
+//     orderId: orderId.value,
+//     paymentMethod: paymentMethod.value,
+//     payCallback: `${window.location.origin}/room`, //支付成功跳转路径到room
+//   })
+//   //跳转到支付宝进行支付，成功后到PayCallback
+//   window.location.href = res.payUrl
+// }
 //
 onMounted(() => {
   loadData()
@@ -123,7 +121,7 @@ onBeforeRouteLeave(() => {
       @click="submit"
     />
     <!-- 支付弹层 -->
-    <van-action-sheet
+    <!-- <van-action-sheet
       v-model:show="show"
       title="选择支付方式"
       :close-on-popstate="false"
@@ -146,7 +144,14 @@ onBeforeRouteLeave(() => {
           <van-button type="primary" round block @click="pay">立即支付</van-button>
         </div>
       </div>
-    </van-action-sheet>
+    </van-action-sheet> -->
+    <owPaySheet
+      :orderId="orderId as string"
+      :actualPayment="payInfo.actualPayment"
+      :onClose="onClose"
+      :show="show"
+      :pay-callback="`${window.location.origin}/room`"
+    />
   </div>
 </template>
 <style lang="scss" scoped>
