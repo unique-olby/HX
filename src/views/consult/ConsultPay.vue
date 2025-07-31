@@ -6,9 +6,12 @@ import { useConsultStore } from '@/stores'
 import type { ConsultOrderPreData } from '@/types/consult'
 import type { Patient } from '@/types/user'
 import { showConfirmDialog, showLoadingToast, showToast } from 'vant'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 
+// 获取当前域名
+const currentOrigin = window.location.origin
+const payCallbackUrl = computed(() => `${currentOrigin}/room`)
 const store = useConsultStore()
 // 1. 查询预订单信息
 const payInfo = ref<ConsultOrderPreData>()
@@ -33,11 +36,9 @@ const agree = ref(false)
 const show = ref(false)
 const orderId = ref<string>()
 const submit = async () => {
-  console.log('ffff开始执行')
   if (!agree.value) return showToast('请勾选我已同意支付协议')
   console.log('ffff', store.consult)
   const res = await createConsultOrder(store.consult)
-  console.log('ffff', res)
   orderId.value = res.id
   // store.clear()
   // 打开
@@ -150,7 +151,7 @@ onBeforeRouteLeave(() => {
       :actualPayment="payInfo.actualPayment"
       :onClose="onClose"
       :show="show"
-      :pay-callback="`${window.location.origin}/room`"
+      :pay-callback="payCallbackUrl"
     />
   </div>
 </template>

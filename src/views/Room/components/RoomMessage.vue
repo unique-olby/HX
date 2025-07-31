@@ -9,14 +9,18 @@ import type { Image } from '@/types/consult'
 import dayjs from 'dayjs'
 import { useUserStore } from '@/stores'
 import { getPrescriptionPic } from '@/apis/consult'
-import { request } from '@/utils/request'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { getMedicalOrderDetail } from '@/apis/medicine'
+import type { OrderDetail } from '@/types/medicine'
+import { ref } from 'vue'
 
 defineProps<{
   list: Message[]
 }>()
+
 const router = useRouter()
 const store = useUserStore()
+
 // 定义格式化描述患病时间和是否就诊
 const formIllness = (value: ConsultTime) => {
   return timeOptions.find((item) => item.value === value)?.label
@@ -47,11 +51,15 @@ const lookPre = async (id?: string) => {
 }
 
 // 跳转支付
-const goPay = (prescription?: Prescription) => {
+const goPay = async (prescription?: Prescription) => {
   if (prescription) {
     if (prescription.status === PrescriptionStatus.Invalid) {
       showToast('处方已失效')
       return
+    }
+    if (prescription.status === PrescriptionStatus.Payment) {
+      showToast('处方已支付')
+      return router.push(`/medicine/pay?id=${prescription.id}`)
     }
     if (prescription.status === PrescriptionStatus.NotPayment) {
       showToast('处方未支付')
@@ -170,7 +178,13 @@ const formatTime = (time: string) => {
             <div class="num">x{{ med.amount }}</div>
           </div>
         </div>
-        <div class="foot" @click="goPay(item.msg.prescription)"><span>购买药品</span></div>
+        <div class="foot" @click="goPay(item.msg.prescription)">
+          <span>{{
+            item.msg.prescription?.status === PrescriptionStatus.Payment
+              ? '查看订单详情'
+              : '购买药品'
+          }}</span>
+        </div>
       </div>
     </div>
     <!-- 9. 订单取消 -->

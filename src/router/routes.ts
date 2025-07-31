@@ -78,6 +78,30 @@ const routes = [
     component: () => import('@/views/Room/RoomIndex.vue'),
     meta: { title: '问诊室' },
   },
+  // 药品支付结果
+  {
+    path: '/medicine/pay/result',
+    component: () => import('@/views/medicine/OrderPayResult.vue'),
+    meta: { title: '药品支付结果' }
+  },
+  // 药品支付
+  {
+    path: '/medicine/pay',
+    component: () => import('@/views/medicine/OrderPay.vue'),
+    meta: { title: '药品支付' }
+  },
+  // 药品订单详情
+  {
+    path: '/medicine/:id',
+    component: () => import('@/views/medicine/OrderDetail.vue'),
+    meta: { title: '药品订单详情' }
+  },
+  // 药品物流详情
+  {
+    path: '/medicine/express/:id',
+    component: () => import('@/views/medicine/OrderExpress.vue'),
+    meta: { title: '物流详情' }
+  }
 ]
 
 export default routes

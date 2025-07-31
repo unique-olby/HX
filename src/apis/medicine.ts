@@ -1,4 +1,4 @@
-import type { OrderPre, AddressItem } from '@/types/medicine.d.ts'
+import type { OrderPre, AddressItem, OrderDetail, Express } from '@/types/medicine.d.ts'
 import { request } from '@/utils/request'
 
 // 查询药品订单预支付信息
@@ -10,3 +10,9 @@ export const getAddressList = () => request.get<any, AddressItem[]>('/patient/or
 // 创建药品订单
 export const createMedicalOrder = (data: { id: string; addressId: string; couponId?: string }) =>
   request.post<any, { id: string }>('/patient/medicine/order', data)
+// 获取药品订单详情
+export const getMedicalOrderDetail = (id: string) =>
+  request.get<any, OrderDetail>(`/patient/medicine/order/detail/${id}`)
+// 获取药品订单物流信息
+export const getMedicalOrderLogistics = (id: string) =>
+  request.get<any, Express>(`/patient/order/${id}/logistics`)
