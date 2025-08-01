@@ -3,7 +3,7 @@ import { cancelOrder, createConsultOrder, deleteOrder } from '@/apis/consult'
 import { OrderType } from '@/enums'
 import { useConsultStore } from '@/stores'
 import type { ConsultOrderItem } from '@/types/consult.d' // 修复导入路径
-import { Dialog, showConfirmDialog, showFailToast, showSuccessToast, submitBarProps } from 'vant'
+import { showConfirmDialog, showSuccessToast } from 'vant'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 const props = defineProps<{

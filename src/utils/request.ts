@@ -3,7 +3,11 @@ import router from '@/router'
 import axios, { AxiosError } from 'axios'
 import { showFailToast } from 'vant'
 
-//axios实例
+// 修复：process 可能未定义，需加判断，或用 import.meta.env 代替
+// Vite 项目中应使用 import.meta.env
+
+
+// axios实例
 const baseUrl = 'https://consult-api.itheima.net/'
 const request = axios.create({
   baseURL: baseUrl,

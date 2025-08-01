@@ -13,4 +13,5 @@ const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
+console.log('读取环境变量', import.meta.env)
 app.mount('#app')
