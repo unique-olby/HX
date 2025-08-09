@@ -1,99 +1,339 @@
 <template>
-  <div class="home-page">
-    <!-- 1. 头部 -->
-    <div class="home-header">
-      <div class="con">
-        <h1>HX健康通</h1>
-        <div class="search"><owIcon icon-url="home-search" /> 搜一搜：疾病/症状/医生/健康知识</div>
+  <div class="skeleton-container" v-if="loading">
+    <div class="skeleton-header">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-search"></div>
+    </div>
+    <div class="skeleton-navs">
+      <div class="skeleton-nav-row">
+        <div class="skeleton-nav-item">
+          <div class="skeleton-nav-icon"></div>
+          <div class="skeleton-nav-title"></div>
+          <div class="skeleton-nav-desc"></div>
+        </div>
+        <div class="skeleton-nav-item">
+          <div class="skeleton-nav-icon"></div>
+          <div class="skeleton-nav-title"></div>
+          <div class="skeleton-nav-desc"></div>
+        </div>
+        <div class="skeleton-nav-item">
+          <div class="skeleton-nav-icon"></div>
+          <div class="skeleton-nav-title"></div>
+          <div class="skeleton-nav-desc"></div>
+        </div>
+      </div>
+      <div class="skeleton-nav-row">
+        <div class="skeleton-nav-item-min">
+          <div class="skeleton-nav-icon-min"></div>
+          <div class="skeleton-nav-title-min"></div>
+        </div>
+        <div class="skeleton-nav-item-min">
+          <div class="skeleton-nav-icon-min"></div>
+          <div class="skeleton-nav-title-min"></div>
+        </div>
+        <div class="skeleton-nav-item-min">
+          <div class="skeleton-nav-icon-min"></div>
+          <div class="skeleton-nav-title-min"></div>
+        </div>
+        <div class="skeleton-nav-item-min">
+          <div class="skeleton-nav-icon-min"></div>
+          <div class="skeleton-nav-title-min"></div>
+        </div>
       </div>
     </div>
-    <!-- 2. 导航 -->
-    <div class="home-navs">
-      <van-row>
-        <van-col span="8">
-          <router-link to="/" class="nav">
-            <owIcon icon-url="home-doctor"></owIcon>
-            <p class="title">问医生</p>
-            <p class="desc">按科室查问医生</p>
-          </router-link>
-        </van-col>
-        <van-col span="8">
-          <router-link @click="store.setType(ConsultType.Fast)" to="/consult/fast" class="nav">
-            <owIcon icon-url="home-graphic"></owIcon>
-            <p class="title">极速问诊</p>
-            <p class="desc">20s医生极速回复</p>
-          </router-link>
-        </van-col>
-        <van-col span="8">
-          <router-link to="/" class="nav">
-            <owIcon icon-url="home-prescribe"></owIcon>
-            <p class="title">开药门诊</p>
-            <p class="desc">线上买药更方便</p>
-          </router-link>
-        </van-col>
-      </van-row>
-      <van-row>
-        <van-col span="6">
-          <router-link to="/" class="nav min">
-            <owIcon icon-url="home-order"></owIcon>
-            <p class="title">药品订单</p>
-          </router-link>
-        </van-col>
-        <van-col span="6">
-          <router-link to="/" class="nav min">
-            <owIcon icon-url="home-docs"></owIcon>
-            <p class="title">健康档案</p>
-          </router-link>
-        </van-col>
-        <van-col span="6">
-          <router-link to="/" class="nav min">
-            <owIcon icon-url="home-rp"></owIcon>
-            <p class="title">我的处方</p>
-          </router-link>
-        </van-col>
-        <van-col span="6">
-          <router-link to="/" class="nav min">
-            <owIcon icon-url="home-find"></owIcon>
-            <p class="title">疾病查询</p>
-          </router-link>
-        </van-col>
-      </van-row>
+    <div class="skeleton-banner">
+      <div class="skeleton-banner"></div>
+      <div class="skeleton-banner"></div>
     </div>
-    <!-- 3. 轮播图 -->
-    <div class="home-banner">
-      <van-swipe indicator-color="#fff">
-        <van-swipe-item>
-          <img src="@/assets/ad.png" alt="" />
-        </van-swipe-item>
-        <van-swipe-item>
-          <img src="@/assets/ad.png" alt="" />
-        </van-swipe-item>
-      </van-swipe>
+    <div class="skeleton-tabs">
+      <div class="skeleton-tab-headers">
+        <div class="skeleton-tab-header"></div>
+        <div class="skeleton-tab-header"></div>
+        <div class="skeleton-tab-header"></div>
+      </div>
+      <div class="skeleton-tab-content">
+        <div class="skeleton-content-item" v-for="i in 3" :key="i">
+          <div class="skeleton-content-image"></div>
+          <div class="skeleton-content-text">
+            <div class="skeleton-content-title"></div>
+            <div class="skeleton-content-desc"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- 4. 知识列表：关注、推荐、减脂、饮食 -->
-    <van-tabs shrink sticky v-model:active="active">
-      <van-tab name="like" title="关注">
-        <OwFollowDoctor></OwFollowDoctor>
-        <owKnowlegeList type="like" />
-      </van-tab>
-      <van-tab name="recommend" title="推荐"><owKnowlegeList type="recommend" /></van-tab>
-      <van-tab name="fatReduction" title="减脂"><owKnowlegeList type="fatReduction" /></van-tab>
-      <van-tab name="food" title="饮食"><owKnowlegeList type="food" /></van-tab>
-    </van-tabs>
+  </div>
+
+  <!-- 真实内容 -->
+  <div v-else>
+    <div class="home-page">
+      <!-- 1. 头部 -->
+      <div class="home-header">
+        <div class="con">
+          <h1>HX健康通</h1>
+          <div class="search">
+            <owIcon icon-url="home-search" /> 搜一搜：疾病/症状/医生/健康知识
+          </div>
+        </div>
+      </div>
+      <!-- 2. 导航 -->
+      <div class="home-navs">
+        <van-row>
+          <van-col span="8">
+            <router-link to="/" class="nav">
+              <owIcon icon-url="home-doctor"></owIcon>
+              <p class="title">问医生</p>
+              <p class="desc">按科室查问医生</p>
+            </router-link>
+          </van-col>
+          <van-col span="8">
+            <router-link @click="store.setType(ConsultType.Fast)" to="/consult/fast" class="nav">
+              <owIcon icon-url="home-graphic"></owIcon>
+              <p class="title">极速问诊</p>
+              <p class="desc">20s医生极速回复</p>
+            </router-link>
+          </van-col>
+          <van-col span="8">
+            <router-link to="/" class="nav">
+              <owIcon icon-url="home-prescribe"></owIcon>
+              <p class="title">开药门诊</p>
+              <p class="desc">线上买药更方便</p>
+            </router-link>
+          </van-col>
+        </van-row>
+        <van-row>
+          <van-col span="6">
+            <router-link to="/" class="nav min">
+              <owIcon icon-url="home-order"></owIcon>
+              <p class="title">药品订单</p>
+            </router-link>
+          </van-col>
+          <van-col span="6">
+            <router-link to="/" class="nav min">
+              <owIcon icon-url="home-docs"></owIcon>
+              <p class="title">健康档案</p>
+            </router-link>
+          </van-col>
+          <van-col span="6">
+            <router-link to="/" class="nav min">
+              <owIcon icon-url="home-rp"></owIcon>
+              <p class="title">我的处方</p>
+            </router-link>
+          </van-col>
+          <van-col span="6">
+            <router-link to="/" class="nav min">
+              <owIcon icon-url="home-find"></owIcon>
+              <p class="title">疾病查询</p>
+            </router-link>
+          </van-col>
+        </van-row>
+      </div>
+      <!-- 3. 轮播图 -->
+      <div class="home-banner">
+        <van-swipe indicator-color="#fff">
+          <van-swipe-item>
+            <img src="@/assets/ad.png" alt="" />
+          </van-swipe-item>
+          <van-swipe-item>
+            <img src="@/assets/ad.png" alt="" />
+          </van-swipe-item>
+        </van-swipe>
+      </div>
+      <!-- 4. 知识列表：关注、推荐、减脂、饮食 -->
+      <van-tabs shrink sticky v-model:active="active">
+        <van-tab name="like" title="关注">
+          <OwFollowDoctor></OwFollowDoctor>
+          <owKnowlegeList type="like" />
+        </van-tab>
+        <van-tab name="recommend" title="推荐"><owKnowlegeList type="recommend" /></van-tab>
+        <van-tab name="fatReduction" title="减脂"><owKnowlegeList type="fatReduction" /></van-tab>
+        <van-tab name="food" title="饮食"><owKnowlegeList type="food" /></van-tab>
+      </van-tabs>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { KnowledgeType } from '@/types/consult'
 import OwFollowDoctor from './components/ow-FollowDoctor.vue'
 import { useConsultStore } from '@/stores'
 import { ConsultType } from '@/enums'
 const store = useConsultStore()
 const active = ref(0)
+const loading = ref(true)
+
+onMounted(() => {
+  // 这里模拟加载，实际开发中请在数据加载完毕后再设置 loading = false
+  setTimeout(() => {
+    loading.value = false
+  }, 1200)
+})
 </script>
 
 <style lang="scss" scoped>
+/* 骨架屏样式 */
+.skeleton-container {
+  padding-bottom: 50px;
+  background: #f7f8fa;
+}
+.skeleton-header {
+  height: 100px;
+  padding: 0 15px;
+  background: linear-gradient(180deg, rgba(123, 253, 68, 0.85), #2caeb7);
+  border-bottom-left-radius: 150px 20px;
+  border-bottom-right-radius: 150px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.skeleton-title {
+  width: 100px;
+  height: 22px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+.skeleton-search {
+  width: 90%;
+  height: 40px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 20px;
+}
+.skeleton-navs {
+  padding: 10px 15px 0 15px;
+}
+.skeleton-nav-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.skeleton-nav-item,
+.skeleton-nav-item-min {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.skeleton-nav-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+.skeleton-nav-title {
+  width: 40px;
+  height: 14px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+.skeleton-nav-desc {
+  width: 60px;
+  height: 10px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+.skeleton-nav-icon-min {
+  width: 31px;
+  height: 31px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 50%;
+  margin-bottom: 4px;
+}
+.skeleton-nav-title-min {
+  width: 32px;
+  height: 10px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+.skeleton-banner {
+  margin: 10px 15px;
+  height: 100px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+.skeleton-tabs {
+  margin: 10px 0;
+  padding: 0 15px;
+}
+.skeleton-tab-headers {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.skeleton-tab-header {
+  flex: 1;
+  height: 24px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 12px;
+}
+.skeleton-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.skeleton-content-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.skeleton-content-image {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+.skeleton-content-text {
+  flex: 1;
+}
+.skeleton-content-title {
+  width: 80%;
+  height: 16px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.skeleton-content-desc {
+  width: 60%;
+  height: 12px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 真实内容样式（原有首页样式，全部保留） */
 .home-page {
   padding-bottom: 50px;
 }

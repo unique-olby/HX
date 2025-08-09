@@ -53,7 +53,6 @@ export type OrderDetail = {
   roomId: string
 }
 
-
 // 物流日志item
 export type Log = {
   id: string
@@ -77,4 +76,11 @@ export type Express = {
   list: Log[]
   logisticsInfo: Location[]
   currentLocationInfo: Location
+}
+
+// 药品订单列表分页类型
+export type MedicineOrderPage = {
+  pageTotal: number
+  total: number
+  rows: OrderDetail[]
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getKnowledgePage } from '@/apis/consult'
-import type { Knowledge, KnowledgeList, KnowledgeParams, KnowledgeType } from '@/types/consult'
+import type { KnowledgeList, KnowledgeParams, KnowledgeType } from '@/types/consult'
 import { onMounted, ref } from 'vue'
 
 const props = defineProps<{
@@ -33,6 +33,7 @@ onMounted(() => {
   onLoad()
 })
 </script>
+
 <template>
   <div class="knowledge-list">
     <van-list
@@ -45,3 +46,19 @@ onMounted(() => {
     </van-list>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.knowledge-list {
+  padding: 0 15px; /* 添加左右边距 */
+
+  /* 确保列表内容有合适的间距 */
+  :deep(.van-list) {
+    padding: 0;
+  }
+
+  /* 为每个卡片添加底部间距 */
+  :deep(.ow-knowlege-card) {
+    margin-bottom: 12px;
+  }
+}
+</style>

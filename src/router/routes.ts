@@ -101,6 +101,11 @@ const routes = [
     path: '/medicine/express/:id',
     component: () => import('@/views/medicine/OrderExpress.vue'),
     meta: { title: '物流详情' }
+  },
+  {
+    path:'/orderList',
+    component:()=>import('@/views/medicine/OrderList.vue'),
+    meta:{title:'购物订单列表'}
   }
 ]
 

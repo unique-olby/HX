@@ -11,4 +11,14 @@ const flagOptions = [
   { label: '没就诊过', value: 1 },
 ]
 
-export {timeOptions,flagOptions}
+// 药品订单状态选项
+const medicineOrderStatusOptions = [
+  { text: '全部', value: '' },
+  { text: '待付款', value: '10' },
+  { text: '待发货', value: '11' },
+  { text: '待收货', value: '12' },
+  { text: '已完成', value: '13' },
+  { text: '已取消', value: '14' }
+]
+
+export { timeOptions, flagOptions, medicineOrderStatusOptions }
